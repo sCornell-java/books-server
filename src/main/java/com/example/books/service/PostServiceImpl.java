@@ -1,42 +1,77 @@
 package com.example.books.service;
 
+import com.example.books.DTO.PostRequestDto;
+import com.example.books.dto.PostDTO;
 import com.example.books.entity.Post;
 import com.example.books.repository.PostRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
-
     @Override
-    public Post createPost(Post post) {
-        String title = post.getTitle() != null ? post.getTitle().trim() : "";
-        String content = post.getContent() != null ? post.getContent().trim() : "";
+    public PostDTO createPost(PostRequestDto dto) {
+        String title = dto.getTitle() != null ? dto.getTitle().trim() : "";
+        String content = dto.getContent() != null ? dto.getContent().trim() : "";
 
         if (!StringUtils.hasText(title) || !StringUtils.hasText(content)) {
             return null;
         }
 
-        post.setTitle(title);
-        post.setContent(content);
-        return postRepository.save(post);
+        Post post = Post.builder()
+                .title(title)
+                .content(content)
+                .author(dto.getAuthor())
+                .rating(dto.getRating())
+                .build();
+
+
+        Post saved = postRepository.save(post);
+
+        return new PostDTO(
+                saved.getId(),
+                saved.getTitle(),
+                saved.getContent(),
+                saved.getAuthor(),
+                saved.getRating(),
+                saved.getCreatedAt()
+        );
     }
 
     @Override
-    public List<Post> findAllByUserId(Long userId) {
-        return postRepository.findAllById(userId);
+    public List<PostDTO> findAllByUserId(Long userId) {
+        List<Post> posts = postRepository.findAllById(userId);
+
+        return posts.stream()
+                .map(p -> new PostDTO(
+                        p.getId(),
+                        p.getTitle(),
+                        p.getContent(),
+                        p.getAuthor(),
+                        p.getRating(),
+                        p.getCreatedAt()))
+                .toList();
     }
 
-    public List<Post> findAll() {
-        return postRepository.findAll();
+    @Override
+    public List<PostDTO> findAll() {
+        List<Post> posts = postRepository.findAll();
+
+        return posts.stream()
+                .map(p -> new PostDTO(
+                        p.getId(),
+                        p.getTitle(),
+                        p.getContent(),
+                        p.getAuthor(),
+                        p.getRating(),
+                        p.getCreatedAt()))
+                .toList();
     }
 
     @Override
