@@ -6,4 +6,5 @@ import java.util.List;
 public interface PostService {
     Post createPost(Post post);
     List<Post> findAllByUserId(Long userId);
+    boolean deletePost(Long id);
 }

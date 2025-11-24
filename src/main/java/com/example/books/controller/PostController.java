@@ -1,7 +1,10 @@
 package com.example.books.controller;
 
+import com.example.books.dto.ResponseDTO;
 import com.example.books.entity.Post;
 import com.example.books.repository.PostRepository;
+import com.example.books.service.PostServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +13,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/post")
 public class PostController {
+
+    @Autowired
+    private PostServiceImpl postService;
 
     private final PostRepository postRepository;
 
@@ -28,6 +34,14 @@ public class PostController {
     @GetMapping
     public List<Post> findAll() {
         return postRepository.findAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseDTO deletePost(
+            @PathVariable("id") Long id
+    ) {
+        boolean result = postService.deletePost(id);
+        return new ResponseDTO(result ? "deleted" : "not found");
     }
 }
 

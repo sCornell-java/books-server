@@ -38,4 +38,13 @@ public class PostServiceImpl implements PostService {
     public List<Post> findAll() {
         return postRepository.findAll();
     }
+
+    @Override
+    public boolean deletePost(Long id) {
+        if (postRepository.existsById(id)) {
+            postRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }
