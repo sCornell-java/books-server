@@ -1,4 +1,7 @@
 package com.example.books.service;
 
-public class PostService {
+import org.springframework.stereotype.Service;
+
+@Service
+public interface PostService {
 }
