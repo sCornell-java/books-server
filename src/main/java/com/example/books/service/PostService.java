@@ -1,7 +1,9 @@
 package com.example.books.service;
 
-import org.springframework.stereotype.Service;
+import com.example.books.entity.Post;
+import java.util.List;
 
-@Service
 public interface PostService {
+    Post createPost(Post post);
+    List<Post> findAllByUserId(Long userId);
 }

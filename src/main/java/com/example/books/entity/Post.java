@@ -30,4 +30,9 @@ public class Post {
 
     @Column(name = "createdAt", nullable = false )
     private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
