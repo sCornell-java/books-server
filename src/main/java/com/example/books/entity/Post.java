@@ -29,7 +29,7 @@ public class Post {
     @Column(name = "rating", nullable = false )
     private Long rating;
 
-    @Column(name = "createdAt", nullable = false )
+    @Column(name = "created_at", nullable = false )
     private LocalDateTime createdAt;
 
     @PrePersist
