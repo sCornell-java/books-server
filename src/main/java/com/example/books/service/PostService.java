@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface PostService {
     PostDTO createPost(PostRequestDTO dto);
-    List<PostDTO> findAllByUserId(Long userId);
     List<PostDTO> findAll();
     boolean updatePost(PostDTO dto);
     boolean deletePost(Long id);

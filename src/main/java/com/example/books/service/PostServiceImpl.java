@@ -1,11 +1,12 @@
 package com.example.books.service;
 
-import com.example.books.dto.*;
 import com.example.books.entity.Post;
-import com.example.books.repository.PostRepository;
+import com.example.books.repository.PostQuerydslRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import com.example.books.dto.PostDTO;
+import com.example.books.dto.PostRequestDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
-    private final PostRepository postRepository;
+    private final PostQuerydslRepository postQuerydslRepository;
 
     @Override
     public PostDTO createPost(PostRequestDTO dto) {
@@ -34,7 +35,7 @@ public class PostServiceImpl implements PostService {
                 .build();
 
 
-        Post saved = postRepository.save(post);
+        Post saved = postQuerydslRepository.save(post);
 
         return new PostDTO(
                 saved.getId(),
@@ -47,23 +48,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDTO> findAllByUserId(Long userId) {
-        List<Post> posts = postRepository.findAllById(userId);
-
-        return posts.stream()
-                .map(p -> new PostDTO(
-                        p.getId(),
-                        p.getTitle(),
-                        p.getContent(),
-                        p.getAuthor(),
-                        p.getRating(),
-                        p.getCreatedAt()))
-                .toList();
-    }
-
-    @Override
     public List<PostDTO> findAll() {
-        return postRepository.findAll().stream().map(p -> {
+        return postQuerydslRepository.findAll().stream().map(p -> {
             PostDTO dto = new PostDTO();
             dto.setId(p.getId());
             dto.setTitle(p.getTitle());
@@ -77,14 +63,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public boolean updatePost(PostDTO dto) {
-        Optional<Post> optional = postRepository.findById(dto.getId());
+        Optional<Post> optional = postQuerydslRepository.findById(dto.getId());
         if (optional.isPresent()) {
             Post post = optional.get();
             post.setTitle(dto.getTitle());
             post.setContent(dto.getContent());
             post.setAuthor(dto.getAuthor());
             post.setRating(dto.getRating());
-            postRepository.save(post);
+            postQuerydslRepository.save(post);
             return true;
         }
         return false;
@@ -92,8 +78,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public boolean deletePost(Long id) {
-        if (postRepository.existsById(id)) {
-            postRepository.deleteById(id);
+        if (postQuerydslRepository.existsById(id)) {
+            postQuerydslRepository.deleteById(id);
             return true;
         }
         return false;
