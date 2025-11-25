@@ -1,7 +1,6 @@
 package com.example.books.service;
 
-import com.example.books.DTO.PostRequestDto;
-import com.example.books.DTO.PostResponseDto;
+import com.example.books.dto.*;
 import com.example.books.entity.Post;
 import com.example.books.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -16,7 +17,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
-    public PostResponseDto createPost(PostRequestDto dto) {
+    public PostDTO createPost(PostRequestDTO dto) {
         String title = dto.getTitle() != null ? dto.getTitle().trim() : "";
         String content = dto.getContent() != null ? dto.getContent().trim() : "";
 
@@ -34,7 +35,7 @@ public class PostServiceImpl implements PostService {
 
         Post saved = postRepository.save(post);
 
-        return new PostResponseDto(
+        return new PostDTO(
                 saved.getId(),
                 saved.getTitle(),
                 saved.getContent(),
@@ -45,11 +46,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDto> findAllByUserId(Long userId) {
+    public List<PostDTO> findAllByUserId(Long userId) {
         List<Post> posts = postRepository.findAllById(userId);
 
         return posts.stream()
-                .map(p -> new PostResponseDto(
+                .map(p -> new PostDTO(
                         p.getId(),
                         p.getTitle(),
                         p.getContent(),
@@ -60,17 +61,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDto> findAll() {
-        List<Post> posts = postRepository.findAll();
+    public List<PostDTO> findAll() {
+        return postRepository.findAll().stream().map(p -> {
+            PostDTO dto = new PostDTO();
+            dto.setId(p.getId());
+            dto.setTitle(p.getTitle());
+            dto.setContent(p.getContent());
+            dto.setAuthor(p.getAuthor());
+            dto.setRating(p.getRating());
+            dto.setCreatedAt(p.getCreatedAt());
+            return dto;
+        }).collect(Collectors.toList());
+    }
 
-        return posts.stream()
-                .map(p -> new PostResponseDto(
-                        p.getId(),
-                        p.getTitle(),
-                        p.getContent(),
-                        p.getAuthor(),
-                        p.getRating(),
-                        p.getCreatedAt()))
-                .toList();
+    @Override
+    public boolean deletePost(Long id) {
+        if (postRepository.existsById(id)) {
+            postRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
