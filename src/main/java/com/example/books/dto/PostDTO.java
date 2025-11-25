@@ -1,9 +1,6 @@
-package com.example.books.DTO;
+package com.example.books.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -11,11 +8,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostResponseDto {
+@NoArgsConstructor
+public class PostDTO {
     private Long id;
     private String title;
-    private String content;
     private String author;
+    private String content;
     private Long rating;
     private LocalDateTime createdAt;
 }

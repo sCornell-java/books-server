@@ -1,12 +1,14 @@
 package com.example.books.service;
 
-import com.example.books.DTO.PostRequestDto;
-import com.example.books.DTO.PostResponseDto;
+import com.example.books.dto.PostRequestDTO;
+import com.example.books.dto.PostDTO;
 
 import java.util.List;
 
 public interface PostService {
-    PostResponseDto createPost(PostRequestDto dto);
-    List<PostResponseDto> findAllByUserId(Long userId);
-    List<PostResponseDto> findAll();
+    PostDTO createPost(PostRequestDTO dto);
+    List<PostDTO> findAllByUserId(Long userId);
+    List<PostDTO> findAll();
+    boolean deletePost(Long id);
+
 }
