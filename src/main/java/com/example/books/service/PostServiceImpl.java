@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,6 +73,21 @@ public class PostServiceImpl implements PostService {
             dto.setCreatedAt(p.getCreatedAt());
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean updatePost(PostDTO dto) {
+        Optional<Post> optional = postRepository.findById(dto.getId());
+        if (optional.isPresent()) {
+            Post post = optional.get();
+            dto.setTitle(dto.getTitle());
+            dto.setContent(dto.getContent());
+            dto.setAuthor(dto.getAuthor());
+            dto.setRating(dto.getRating());
+            postRepository.save(post);
+            return true;
+        }
+        return false;
     }
 
     @Override
