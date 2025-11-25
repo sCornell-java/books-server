@@ -80,10 +80,10 @@ public class PostServiceImpl implements PostService {
         Optional<Post> optional = postRepository.findById(dto.getId());
         if (optional.isPresent()) {
             Post post = optional.get();
-            dto.setTitle(dto.getTitle());
-            dto.setContent(dto.getContent());
-            dto.setAuthor(dto.getAuthor());
-            dto.setRating(dto.getRating());
+            post.setTitle(dto.getTitle());
+            post.setContent(dto.getContent());
+            post.setAuthor(dto.getAuthor());
+            post.setRating(dto.getRating());
             postRepository.save(post);
             return true;
         }
