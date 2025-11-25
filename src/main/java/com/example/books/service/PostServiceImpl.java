@@ -1,7 +1,6 @@
 package com.example.books.service;
 
-import com.example.books.DTO.PostRequestDto;
-import com.example.books.dto.PostDTO;
+import com.example.books.dto.*;
 import com.example.books.entity.Post;
 import com.example.books.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -16,7 +17,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
-    public PostDTO createPost(PostRequestDto dto) {
+    public PostDTO createPost(PostRequestDTO dto) {
         String title = dto.getTitle() != null ? dto.getTitle().trim() : "";
         String content = dto.getContent() != null ? dto.getContent().trim() : "";
 
@@ -61,17 +62,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDTO> findAll() {
-        List<Post> posts = postRepository.findAll();
-
-        return posts.stream()
-                .map(p -> new PostDTO(
-                        p.getId(),
-                        p.getTitle(),
-                        p.getContent(),
-                        p.getAuthor(),
-                        p.getRating(),
-                        p.getCreatedAt()))
-                .toList();
+        return postRepository.findAll().stream().map(p -> {
+            PostDTO dto = new PostDTO();
+            dto.setId(p.getId());
+            dto.setTitle(p.getTitle());
+            dto.setContent(p.getContent());
+            dto.setAuthor(p.getAuthor());
+            dto.setRating(p.getRating());
+            dto.setCreatedAt(p.getCreatedAt());
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     @Override
