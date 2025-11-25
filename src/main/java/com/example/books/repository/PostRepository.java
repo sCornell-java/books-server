@@ -9,8 +9,4 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>, PostQuerydslRepository {
     List<Post> findAllById(Long userId);
-
-    boolean findByTitle(String title);
-
-    void deleteByTitle(String title);
 }
