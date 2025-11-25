@@ -20,13 +20,10 @@ public class PostController {
 
 
     @PostMapping
-    public Map save(@RequestBody PostRequestDTO post) {
+    public ResponseDTO save(@RequestBody PostRequestDTO post) {
         PostDTO savedPost = postService.createPost(post);
-        return savedPost == null
-                ? Map.of("res", "fail", "msg", "등록 실패!")
-                : Map.of("res", "success", "data", savedPost);
+        return new ResponseDTO(savedPost != null ? "created" : "fail");
     }
-
     @GetMapping
     public List<PostDTO> findAll() {
         return postService.findAll();
