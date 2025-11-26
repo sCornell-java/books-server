@@ -79,20 +79,26 @@ public class PostServiceImpl implements PostService {
         }).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public boolean updatePost(PostDTO dto) {
+        if (dto.getId() == null) return false;
+
         Optional<Post> optional = postQuerydslRepository.findById(dto.getId());
         if (optional.isPresent()) {
             Post post = optional.get();
+
             post.setTitle(dto.getTitle());
             post.setContent(dto.getContent());
             post.setAuthor(dto.getAuthor());
             post.setRating(dto.getRating());
+
             postQuerydslRepository.save(post);
             return true;
         }
         return false;
     }
+
 
     @Override
     public boolean deletePost(Long id) {
