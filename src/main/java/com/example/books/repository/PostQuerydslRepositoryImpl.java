@@ -27,18 +27,21 @@ public class PostQuerydslRepositoryImpl implements PostQuerydslRepository {
     }
 
     @Override
-    public Post save(Post post) {
-        if (post.getId() == null) {
-            em.persist(post);
-            return post;
+    public Post save(Post entity) {
+        if (entity.getId() == null) {
+            em.persist(entity);
+            return entity;
         } else {
-            return em.merge(post);
+            return em.merge(entity);
         }
     }
 
     @Override
     public List<Post> findAll() {
-        return queryFactory.selectFrom(post).fetch();
+        return queryFactory
+                .selectFrom(post)
+                .orderBy(post.id.desc())
+                .fetch();
     }
 
     @Override
