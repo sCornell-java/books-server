@@ -24,9 +24,15 @@ public class PostController {
         PostDTO savedPost = postService.createPost(post);
         return new ResponseDTO(savedPost != null ? "created" : "fail");
     }
+
     @GetMapping
     public List<PostDTO> findAll() {
         return postService.findAll();
+    }
+
+    @GetMapping("/author")
+    public List<PostDTO> findAllByAuthor(@RequestParam("author") String author) {
+        return postService.findAllByAuthor(author);
     }
 
     @PutMapping("/post")

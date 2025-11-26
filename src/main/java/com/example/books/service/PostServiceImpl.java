@@ -2,6 +2,7 @@ package com.example.books.service;
 
 import com.example.books.entity.Post;
 import com.example.books.repository.PostQuerydslRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -18,6 +19,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostQuerydslRepository postQuerydslRepository;
 
+    @Transactional
     @Override
     public PostDTO createPost(PostRequestDTO dto) {
         String title = dto.getTitle() != null ? dto.getTitle().trim() : "";
@@ -46,6 +48,22 @@ public class PostServiceImpl implements PostService {
                 saved.getCreatedAt()
         );
     }
+
+    @Override
+    public List<PostDTO> findAllByAuthor(String author) {
+        return postQuerydslRepository.findAllByAuthor(author)
+                .stream()
+                .map(p -> new PostDTO(
+                        p.getId(),
+                        p.getTitle(),
+                        p.getContent(),
+                        p.getAuthor(),
+                        p.getRating(),
+                        p.getCreatedAt()
+                ))
+                .toList();
+    }
+
 
     @Override
     public List<PostDTO> findAll() {
