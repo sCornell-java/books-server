@@ -21,7 +21,7 @@ class PostControllerTest extends BaseController {
     @DisplayName("post findAll")
     @Test
     void findAll() throws Exception {
-        final String url = "/post";
+        final String url = "/posts";
         Post post = postQuerydslRepository.findById(21L)
                 .orElse(null);
 
