@@ -1,7 +1,6 @@
 package com.example.books.controller;
 
 import com.example.books.base.BaseController;
-import com.example.books.dto.PostDTO;
 import com.example.books.entity.Post;
 import com.example.books.repository.PostQuerydslRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +21,7 @@ class PostControllerTest extends BaseController {
     @Test
     void findAll() throws Exception {
         final String url = "/post";
-        PostDTO post = postQuerydslRepository.findById(1L)
+        Post post = postQuerydslRepository.findById(21L)
                 .orElse(null);
 
         ResultActions resultActions = mockMvc.perform(
@@ -37,11 +36,11 @@ class PostControllerTest extends BaseController {
                 )
                 .andExpect(
                         MockMvcResultMatchers
-                                .jsonPath("$.data.[0].id").value(post.getId())
+                                .jsonPath("$[0].id").value(post.getId())
                 )
                 .andExpect(
                         MockMvcResultMatchers
-                                .jsonPath("$.data.[0].name").value(post.getTitle())
+                                .jsonPath("$[0].title").value(post.getTitle())
                 );
     }
 }
