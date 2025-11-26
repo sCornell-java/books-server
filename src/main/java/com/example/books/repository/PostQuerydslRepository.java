@@ -5,7 +5,7 @@ import com.example.books.entity.Post;
 import java.util.List;
 import java.util.Optional;
 
-public interface PostQuerydslRepository {
+public interface PostQuerydslRepository{
     List<Post> findAllByAuthor(String author);
 
     Post save(Post post);
