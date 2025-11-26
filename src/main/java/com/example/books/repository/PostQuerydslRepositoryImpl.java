@@ -3,6 +3,8 @@ package com.example.books.repository;
 import com.example.books.entity.Post;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Transient;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -54,6 +56,7 @@ public class PostQuerydslRepositoryImpl implements PostQuerydslRepository {
         return findById(id).isPresent();
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         findById(id).ifPresent(em::remove);
